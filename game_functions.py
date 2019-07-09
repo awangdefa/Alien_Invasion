@@ -66,7 +66,7 @@ def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets):
         create_fleet(ai_settings, screen, ship, aliens)
 
 
-def update_screen(ai_settings, screen, ship, aliens, bullets):
+def update_screen(ai_settings, screen, stats, ship, aliens, bullets, play_button):
     """更新屏幕上的图像，并切换到新屏幕"""
     # 每次循环时都重绘屏幕
     screen.fill(ai_settings.bg_color)
@@ -75,6 +75,10 @@ def update_screen(ai_settings, screen, ship, aliens, bullets):
         bullet.draw_bullet()
     ship.blitme()
     aliens.draw(screen)
+
+    # 如果游戏处于非活动状态，就绘制Play按钮
+    if not stats.game_active:
+        play_button.draw_button()
 
     # 让最近绘制的屏幕可见
     pygame.display.flip()
@@ -135,28 +139,30 @@ def change_fleet_direction(ai_settings, aliens):
 
 def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
     """响应被外星人撞到的飞船"""
-    if stats.ships_left >0:
-        #将ships_left减1
+    if stats.ships_left > 0:
+        # 将ships_left减1
         stats.ships_left -= 1
-        #清空外星人和子弹
+        # 清空外星人和子弹
         aliens.empty()
         bullets.empty()
-        #创建一群新的外星人，并将飞船放到屏幕底端中央
+        # 创建一群新的外星人，并将飞船放到屏幕底端中央
         create_fleet(ai_settings, screen, ship, aliens)
         ship.center_ship()
-        #暂停
+        # 暂停
         sleep(0.5)
     else:
         stats.game_active = False
+
 
 def check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets):
     """检查是否有外星人到达了屏幕底端"""
     screen_rect = screen.get_rect()
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
-            #像飞船被撞到一样处理
+            # 像飞船被撞到一样处理
             ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
             break
+
 
 def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     """检查是否有外星人位于屏幕边缘，并更新它们的位置"""
@@ -165,5 +171,5 @@ def update_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     # 检测外星人和飞船之间的碰撞
     if pygame.sprite.spritecollideany(ship, aliens):
         ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
-    #检查是否有外星人到达屏幕底端
+    # 检查是否有外星人到达屏幕底端
     check_aliens_bottom(ai_settings, stats, screen, ship, aliens, bullets)
