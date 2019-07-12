@@ -184,7 +184,7 @@ def ship_hit(ai_settings, screen, stats, sb, ship, aliens, bullets):
         # 将ships_left减1
         stats.ships_left -= 1
 
-        #更新记分牌
+        # 更新记分牌
         sb.prep_ships()
 
         # 清空外星人和子弹

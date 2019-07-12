@@ -2,6 +2,7 @@ import pygame.font
 from pygame.sprite import Group
 from ship import Ship
 
+
 class Scoreboard():
     """显示得分信息的类"""
 
@@ -66,5 +67,5 @@ class Scoreboard():
         self.screen.blit(self.score_image, self.score_rect)
         self.screen.blit(self.high_score_image, self.high_score_rect)
         self.screen.blit(self.level_image, self.level_rect)
-        #绘制飞船
+        # 绘制飞船
         self.ships.draw(self.screen)
